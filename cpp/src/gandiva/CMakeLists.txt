@@ -142,8 +142,13 @@ endif()
 #   endforeach()
 # endif()
 if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
-  string(APPEND GANDIVA_SHARED_LINK_FLAGS
-         " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  if(APPLE)
+    string(APPEND GANDIVA_SHARED_LINK_FLAGS
+           " -Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/exported_symbols.list")
+  else()
+    string(APPEND GANDIVA_SHARED_LINK_FLAGS
+           " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  endif()
 endif()
 
 add_arrow_lib(gandiva
