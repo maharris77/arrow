@@ -357,17 +357,38 @@ include(SetupCxxFlags)
 # Localize thirdparty symbols using a linker version script. This hides them
 # from the client application. The OS X linker does not support the
 # version-script option.
+set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT FALSE)
 if(CMAKE_VERSION VERSION_LESS 3.18)
-  if(APPLE OR WIN32)
-    set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT FALSE)
+  if(WIN32)
+    # No version script or symbols list support on Windows
+  elseif(APPLE)
+    set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT TRUE)
+    set(CXX_LINKER_EXPORT_SYMBOLS_LIST_FLAG "-Wl,-exported_symbols_list,")
+    set(CXX_LINKER_UNEXPORT_SYMBOLS_LIST_FLAG "-Wl,-unexported_symbols_list,")
   else()
     set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT TRUE)
+    set(CXX_LINKER_VERSION_SCRIPT_FLAG "-Wl,--version-script=")
   endif()
 else()
   include(CheckLinkerFlag)
-  check_linker_flag(CXX
-                    "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.map"
-                    CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+  if(APPLE)
+    check_linker_flag(
+      CXX
+      "-Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.list"
+      CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+    if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+      set(CXX_LINKER_EXPORT_SYMBOLS_LIST_FLAG "-Wl,-exported_symbols_list,")
+      set(CXX_LINKER_UNEXPORT_SYMBOLS_LIST_FLAG "-Wl,-unexported_symbols_list,")
+    endif()
+  elseif(NOT WIN32)
+    check_linker_flag(
+      CXX
+      "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.map"
+      CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+    if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+      set(CXX_LINKER_VERSION_SCRIPT_FLAG "-Wl,--version-script=")
+    endif()
+  endif()
 endif()
 
 #
