@@ -280,8 +280,13 @@ if(ARROW_WITH_OPENTELEMETRY)
 endif()
 
 if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
-  set(PARQUET_SHARED_LINK_FLAGS
-      "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  if(APPLE)
+    set(PARQUET_SHARED_LINK_FLAGS
+        "${CXX_LINKER_UNEXPORT_SYMBOLS_LIST_FLAG}${CMAKE_CURRENT_SOURCE_DIR}/unexported_symbols.list")
+  else()
+    set(PARQUET_SHARED_LINK_FLAGS
+        "${CXX_LINKER_VERSION_SCRIPT_FLAG}${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  endif()
 endif()
 
 add_arrow_lib(parquet
