@@ -355,19 +355,27 @@ include(SetupCxxFlags)
 #
 
 # Localize thirdparty symbols using a linker version script. This hides them
-# from the client application. The OS X linker does not support the
-# version-script option.
-if(CMAKE_VERSION VERSION_LESS 3.18)
-  if(APPLE OR WIN32)
-    set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT FALSE)
-  else()
-    set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT TRUE)
-  endif()
-else()
+# from the client application. The macOS linker does not support the
+# version-script option, but it can use exported or unexported symbol lists
+# instead.
+set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT FALSE)
+set(CXX_LINKER_SUPPORTS_EXPORTS_LIST FALSE)
+if(APPLE)
   include(CheckLinkerFlag)
-  check_linker_flag(CXX
-                    "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.map"
-                    CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+  check_linker_flag(
+      CXX
+      "-Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.exports"
+      CXX_LINKER_SUPPORTS_EXPORTS_LIST)
+elseif(NOT WIN32)
+  if(CMAKE_VERSION VERSION_LESS 3.18)
+    set(CXX_LINKER_SUPPORTS_VERSION_SCRIPT TRUE)
+  else()
+    include(CheckLinkerFlag)
+    check_linker_flag(
+        CXX
+        "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/arrow/symbols.map"
+        CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
+  endif()
 endif()
 
 #
