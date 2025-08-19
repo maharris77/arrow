@@ -522,6 +522,11 @@ set(PARQUET_PC_REQUIRES_PRIVATE "")
 
 include(ThirdpartyToolchain)
 
+# ThirdpartyToolchain may modify CMAKE_MODULE_PATH; ensure Arrow's module
+# directory remains at the front so subsequent includes can locate our
+# CMake modules.
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
+
 # Add common flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_COMMON_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ARROW_CXXFLAGS}")
