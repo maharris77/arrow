@@ -144,6 +144,9 @@ endif()
 if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
   string(APPEND GANDIVA_SHARED_LINK_FLAGS
          " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+elseif(CXX_LINKER_SUPPORTS_EXPORTS_LIST)
+  string(APPEND GANDIVA_SHARED_LINK_FLAGS
+         " -Wl,-unexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/symbols.unexported")
 endif()
 
 add_arrow_lib(gandiva
