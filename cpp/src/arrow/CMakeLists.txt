@@ -1010,8 +1010,13 @@ else()
 endif()
 
 if(CXX_LINKER_SUPPORTS_VERSION_SCRIPT)
-  set(ARROW_VERSION_SCRIPT_FLAGS
-      "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  if(APPLE)
+    set(ARROW_VERSION_SCRIPT_FLAGS
+        "-Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/symbols.list")
+  else()
+    set(ARROW_VERSION_SCRIPT_FLAGS
+        "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/symbols.map")
+  endif()
   set(ARROW_SHARED_LINK_FLAGS ${ARROW_VERSION_SCRIPT_FLAGS})
 endif()
 
