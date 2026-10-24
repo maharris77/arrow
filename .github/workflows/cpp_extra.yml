@@ -25,6 +25,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/cpp_extra.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/conda_env_*'
       - 'ci/docker/**'
       - 'ci/scripts/ccache_setup.sh'
@@ -44,6 +45,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/cpp_extra.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/conda_env_*'
       - 'ci/docker/**'
       - 'ci/scripts/ccache_setup.sh'
@@ -211,6 +213,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew bundle --file=cpp/Brewfile
+          python3 ci/scripts/ensure_brotli_homebrew.py
           # We want to link aws-sdk-cpp statically but Homebrew's
           # aws-sdk-cpp provides only shared library. If we have
           # Homebrew's aws-sdk-cpp, our build mix Homebrew's

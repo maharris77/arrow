@@ -27,6 +27,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/cpp.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/conda_env_*'
       - 'ci/docker/**'
       - 'ci/scripts/ccache_setup.sh'
@@ -44,6 +45,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/cpp.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/conda_env_*'
       - 'ci/docker/**'
       - 'ci/scripts/ccache_setup.sh'
@@ -230,6 +232,7 @@ jobs:
           brew uninstall pkg-config || :
           brew uninstall pkg-config@0.29.2 || :
           brew bundle --file=cpp/Brewfile
+          python3 ci/scripts/ensure_brotli_homebrew.py
       - name: Install MinIO
         run: |
           $(brew --prefix bash)/bin/bash \

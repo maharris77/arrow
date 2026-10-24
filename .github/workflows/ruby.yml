@@ -27,6 +27,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/ruby.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/docker/**'
       - 'ci/scripts/c_glib_*'
       - 'ci/scripts/ccache_setup.sh'
@@ -42,6 +43,7 @@ on:
     paths:
       - '.dockerignore'
       - '.github/workflows/ruby.yml'
+      - 'ci/scripts/ensure_brotli_homebrew.py'
       - 'ci/docker/**'
       - 'ci/scripts/c_glib_*'
       - 'ci/scripts/ccache_setup.sh'
@@ -163,6 +165,7 @@ jobs:
           brew uninstall pkg-config || :
           brew uninstall pkg-config@0.29.2 || :
           brew bundle --file=cpp/Brewfile
+          python3 ci/scripts/ensure_brotli_homebrew.py
           brew bundle --file=c_glib/Brewfile
           # For Meson.
           # See also: https://github.com/mesonbuild/meson/issues/7701
