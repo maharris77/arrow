@@ -46,9 +46,10 @@ RUN bash /arrow/ci/scripts/install_emscripten.sh ~ /pyodide
 # make sure zlib is cached in the EMSDK folder
 RUN source ~/emsdk/emsdk_env.sh && embuilder --pic build zlib
 
-# install node 20 (needed for async call support)
+# Install a supported Node release with the CVE-2026-111497 fix.
+# Node >=20 is needed for async call support.
 # and pthread-stubs for build, and unzip needed for chrome build to work
-RUN conda install nodejs=20  unzip pthread-stubs make -c conda-forge
+RUN conda install nodejs=22.23.4  unzip pthread-stubs make -c conda-forge
 
 # install chrome for testing browser based runner
 COPY ci/scripts/install_chromedriver.sh /arrow/ci/scripts/
