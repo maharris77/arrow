@@ -51,6 +51,8 @@ ENV PATH=/opt/python/${CPYTHON_VERSION}-${CPYTHON_VERSION}/bin:${PATH}
 
 # Install vcpkg
 ARG vcpkg
+COPY ci/vcpkg/ports arrow/ci/vcpkg/ports/
+COPY ci/vcpkg/vcpkg-configuration.json arrow/ci/vcpkg/
 COPY ci/vcpkg/*.patch \
      ci/vcpkg/*linux*.cmake \
      ci/vcpkg/vcpkg.json \
