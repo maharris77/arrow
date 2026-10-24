@@ -52,6 +52,8 @@ RUN /arrow/ci/scripts/install_ccache.sh ${ccache} /usr/local
 
 # Install vcpkg
 ARG vcpkg
+COPY ci/vcpkg/ports arrow/ci/vcpkg/ports/
+COPY ci/vcpkg/vcpkg-configuration.json arrow/ci/vcpkg/
 COPY ci/vcpkg/*.patch \
      ci/vcpkg/*linux*.cmake \
      ci/vcpkg/vcpkg.json \
