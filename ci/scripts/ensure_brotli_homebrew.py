@@ -54,12 +54,12 @@ def main():
         print(f"Verified Homebrew {package} {version}: {brotli_prefix}",
               flush=True)
 
-    # cpp_build.sh forwards this to FindBrotliAlt's explicit root lookup.
+    # cpp_build.sh and verify-release-candidate.sh use different option names.
     # Builds explicitly selecting BUNDLED keep the fixed bundled source.
-    cmake_args = os.environ.get("ARROW_CMAKE_ARGS", "")
     with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
-        output.write(f"ARROW_CMAKE_ARGS={cmake_args} "
-                     f"-DBROTLI_ROOT={brotli_prefix}\n")
+        for name in ["ARROW_CMAKE_ARGS", "ARROW_CMAKE_OPTIONS"]:
+            options = os.environ.get(name, "")
+            output.write(f"{name}={options} -DBROTLI_ROOT={brotli_prefix}\n")
 
 
 if __name__ == "__main__":
