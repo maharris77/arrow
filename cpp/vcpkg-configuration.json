@@ -1,0 +1,5 @@
+{
+  "overlay-ports": [
+    "../ci/vcpkg/ports"
+  ]
+}

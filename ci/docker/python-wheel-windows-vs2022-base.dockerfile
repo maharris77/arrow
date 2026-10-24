@@ -96,6 +96,8 @@ RUN setx path "%path%;C:\Program Files\Git\usr\bin"
 # Compiling vcpkg itself from a git tag doesn't work anymore since vcpkg has
 # started to ship precompiled binaries for the vcpkg-tool.
 ARG vcpkg
+COPY ci/vcpkg/ports arrow/ci/vcpkg/ports/
+COPY ci/vcpkg/vcpkg-configuration.json arrow/ci/vcpkg/
 COPY ci/vcpkg/*.patch `
   ci/vcpkg/*windows*.cmake `
   arrow/ci/vcpkg/
