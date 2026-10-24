@@ -51,6 +51,7 @@ jobs:
           {% endif %}
 
           brew bundle --file=arrow/cpp/Brewfile
+          python3 arrow/ci/scripts/ensure_brotli_homebrew.py
           brew bundle --file=arrow/c_glib/Brewfile
 
           # For Meson.
