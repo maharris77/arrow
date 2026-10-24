@@ -200,7 +200,7 @@ class ArrowConan(ConanFile):
         if self.options.with_s3:
             self.requires("aws-sdk-cpp/1.9.234")
         if self.options.with_brotli:
-            self.requires("brotli/1.1.0")
+            self.requires("brotli/1.1.1")
         if self.options.with_bz2:
             self.requires("bzip2/1.0.8")
         if self.options.with_lz4:
