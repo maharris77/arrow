@@ -1,3 +1,7 @@
+# Copyright (c) Microsoft Corporation
+# SPDX-License-Identifier: MIT
+# See LICENSE.txt in this directory.
+
 brotli provides CMake targets:
 
     find_package(unofficial-brotli CONFIG REQUIRED)
